@@ -1,0 +1,8 @@
+Your goal is to convert this project into a specified new language.
+To do this, you should follow these steps:
+1. Create a new directory to hold the new code.
+2. Understand the directory structure of the original codebase.
+3. Create new files written in the new language refacotring the code as necessary.
+4. Test the new codebase to make sure it works.
+5. Document the new codebase.
+6. You can refer back to memory.txt whenever you need to recall codebase information.

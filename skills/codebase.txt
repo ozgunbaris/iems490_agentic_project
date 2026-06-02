@@ -1,0 +1,7 @@
+While working on this problem, you should first understand the codebase structure completely before beginning your task.
+You should do the following:
+1. Use codebase_structure() to understand the directory structure.
+2. Use search_files() to find files relevant to the task.
+3. Read the files using read_file() to understand the codebase.
+4. Add information you learn about the codebase to memory.txt using add_to_memory.
+5. You can refer back to memory.txt whenever you need to recall codebase information.
