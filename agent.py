@@ -69,9 +69,20 @@ def execute_shell(command: str) -> str:
         The stdout and stderr output of the command, or an error message.
     """
     # Safety Check
-    confirm = input(f"\n[PERMISSION REQUIRED] Agent wants to run shell command: `{command}`. Allow? (y/n): ")
-    if confirm.lower() != 'y':
-        return "Action denied by user."
+
+    dangerous_keywords = ["sudo", "su", "shred", "dd", "mkfs", "reboot", "shutdown", "chown", "rm"]
+
+    if not check_if_in_allowed(command.split(" ")[0]):
+        if command.split(" ")[0] in dangerous_keywords:
+            confirm = input(f"\n[DANGEROUS COMMAND - VERIFY THIS IS CORRECT] Agent wants to run shell command: `{command}`. Allow? (y/n)")
+            if confirm.lower() != 'y':
+                return "Action denied by user."
+        else:
+            confirm = input(f"\n[PERMISSION REQUIRED] Agent wants to run shell command: `{command}`. Allow? (y/n) or Always Allow: (a)")
+            if confirm.lower() == 'a':
+                add_to_allow_list(command.split(" ")[0])
+            elif confirm.lower() != 'y':
+                return "Action denied by user."
 
     try:
         result = subprocess.run(
@@ -120,6 +131,38 @@ def codebase_structure(path: str):
         Returns the directory structure as a string.
     """
     return execute_shell("ls -R")
+
+def check_if_in_allowed(command: str):
+    """ Check if command is in allowed list
+    Args:
+        command: the prefix of the command.
+    Returns:
+        A success message or an error string.
+    """
+
+    try:
+        memory_file = read_file("allowed.txt")
+        if command in memory_file:
+            return True
+        else:
+            return False
+    except Exception as e:
+        return f"Error adding to allow list: {str(e)}"
+
+def add_to_allow_list(command: str):
+    """ Adds command to the allow list
+    Args:
+        command: the prefix of the command.
+    Returns:
+        A success message or an error string.
+    """
+
+    try:
+        memory_file = read_file("allowed.txt")
+        write_file("allowed.txt", memory_file + "\n" + command)
+        return "Successfully added to allow list."
+    except Exception as e:
+        return f"Error adding to allow list: {str(e)}"
 
 def add_to_memory(information: str):
     """Adds new information to the memory file.
