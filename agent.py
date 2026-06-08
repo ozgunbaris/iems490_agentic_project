@@ -10,7 +10,7 @@ client = genai.Client()
 
 def find_skill(prompt: str):
     splits = prompt.split("/")
-    skills = [f.name.split('.')[0] for f in os.scandir(skills) if f.name.endswith('txt')]
+    skills = [f.name.split('.')[0] for f in os.scandir("./skills") if f.name.endswith('txt')]
     if len(splits) > 1:
         skillsPre = splits[0]
         skillPotentional = splits[1]
@@ -183,14 +183,15 @@ def add_to_memory(information: str):
 
     
 def run_agent_with_tool():
-    prompt = "Create a new file called 'test_file.txt' and write the word 'Success' inside it. Then, run a shell command to list the files in the current directory."
+    # prompt = "Create a new file called 'test_file.txt' and write the word 'Success' inside it. Then, run a shell command to list the files in the current directory."
+    prompt = "Create a mini python project which plays a game like connect 4. Create the neccesary code, run tests. Do this in the main directory of [/Users/maxbengtsson/Desktop/School/IEMS 490/Final Project/TestCode]"
     print(f"User Prompt: {prompt}\n")
 
     # 1. Initialize a chat session to remember history automatically
     chat = client.chats.create(
         model='gemini-2.5-flash',
         config=types.GenerateContentConfig(
-            tools=[read_file, write_file, execute_shell, search_files],
+            tools=[read_file, write_file, execute_shell, search_files, add_to_memory, codebase_structure],
             temperature=0.0
         )
     )
