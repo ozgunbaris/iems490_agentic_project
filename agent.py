@@ -183,9 +183,11 @@ def add_to_memory(information: str):
 
     
 def run_agent_with_tool():
-    # prompt = "Create a new file called 'test_file.txt' and write the word 'Success' inside it. Then, run a shell command to list the files in the current directory."
-    prompt = "Create a mini python project which plays a game like connect 4. Create the neccesary code, run tests. Do this in the main directory of [/Users/maxbengtsson/Desktop/School/IEMS 490/Final Project/TestCode]"
-    print(f"User Prompt: {prompt}\n")
+    prompt = input("User Prompt: ").strip()
+    if not prompt:
+        print("No prompt provided. Exiting.")
+        return
+    print()
 
     # 1. Initialize a chat session to remember history automatically
     chat = client.chats.create(

@@ -1,3 +1,12 @@
 venv/
 .env
 __pycache__/
+.Rhistory
+
+# Report is kept in Overleaf, not in the repo
+report.tex
+report.md
+report.pdf
+report.aux
+report.log
+report.out
