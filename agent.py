@@ -184,7 +184,9 @@ def add_to_memory(information: str):
     
 def run_agent_with_tool():
     # prompt = "Create a new file called 'test_file.txt' and write the word 'Success' inside it. Then, run a shell command to list the files in the current directory."
-    prompt = "Create a mini python project which plays a game like connect 4. Create the neccesary code, run tests. Do this in the main directory of [/Users/maxbengtsson/Desktop/School/IEMS 490/Final Project/TestCode]"
+    # prompt = "Create a mini python project which plays a game like connect 4. Create the neccesary code, run tests. Do this in the main directory of [/Users/maxbengtsson/Desktop/School/IEMS 490/Final Project/TestCode]"
+    prompt = "/codebase understand the codebase at [/Users/maxbengtsson/Desktop/School/IEMS 490/Final Project/TestCode] and then improve it to make the game better"
+
     print(f"User Prompt: {prompt}\n")
 
     # 1. Initialize a chat session to remember history automatically
@@ -192,6 +194,7 @@ def run_agent_with_tool():
         model='gemini-2.5-flash',
         config=types.GenerateContentConfig(
             tools=[read_file, write_file, execute_shell, search_files, add_to_memory, codebase_structure],
+            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             temperature=0.0
         )
     )
@@ -209,13 +212,13 @@ def run_agent_with_tool():
     response = chat.send_message(prompt)
 
     # 3. The Agent Loop (capped at 10 iterations to prevent runaway loops)
-    for step in range(10):
+    for step in range(20):
         if response.function_calls:
             function_responses = []
             
             for call in response.function_calls:
                 print(f"\n🤖 Agent decided to call tool: {call.name}")
-                print(f"Arguments: {call.args}")
+                # print(f"Arguments: {call.args}")
                 
                 # Act: Execute locally
                 if call.name == "write_file":
